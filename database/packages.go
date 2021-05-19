@@ -8,7 +8,10 @@ import (
 func GetPackageByDownloadKey(key string) (structures.Package, error) {
 	pkg := structures.Package{}
 
-	err := db.Last(&pkg).Error
+	err := db.Joins("INNER JOIN download_queue as dq").
+		Select("packages.id, packages.name, packages.version, packages.ord, packages.path_to_file, packages.on_server").
+		Where("session_key = ?", key).
+		Last(&pkg).Error
 
 	if err != nil {
 		return pkg, err
@@ -19,4 +22,12 @@ func GetPackageByDownloadKey(key string) (structures.Package, error) {
 	}
 
 	return pkg, nil
+}
+
+func RemoveSession(key string) (error) {
+	session := structures.Session{SessionKey: key}
+
+	err := db.Delete(session).Error
+
+	return err
 }
