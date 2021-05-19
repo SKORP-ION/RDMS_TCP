@@ -10,7 +10,7 @@ import (
 func main() {
 	addr := utils.GetServerAddress()
 
-	socket, err := net.Listen("TCP", addr)
+	socket, err := net.Listen("tcp", addr)
 
 	if err != nil {
 		log.Fatal("Can't start server. Error:\n", err)
@@ -19,7 +19,7 @@ func main() {
 	for {
 		conn, err := socket.Accept()
 
-		go handler.Accept(conn, err)
+		handler.Accept(conn, err)
 
 	}
 }

@@ -5,6 +5,7 @@ import (
 	"bufio"
 	"log"
 	"net"
+	"strings"
 )
 
 //Обработчик всех подключений
@@ -17,6 +18,7 @@ func Accept(conn net.Conn, err error) {
 	}
 
 	session_key, err := bufio.NewReader(conn).ReadString('\n')
+	session_key = strings.TrimSuffix(session_key, "\n")
 
 	if err != nil {
 		log.Println(err)
@@ -37,5 +39,5 @@ func Accept(conn net.Conn, err error) {
 		return
 	}
 
-	err = database.RemoveSession(session_key)
+	//err = database.RemoveSession(session_key)
 }
