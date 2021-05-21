@@ -39,5 +39,9 @@ func Accept(conn net.Conn, err error) {
 		return
 	}
 
-	//err = database.RemoveSession(session_key)
+	err = database.RemoveSession(session_key)
+
+	if err != nil {
+		log.Println(err)
+	}
 }

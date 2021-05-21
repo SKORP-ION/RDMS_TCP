@@ -8,8 +8,9 @@ import (
 func GetPackageByDownloadKey(key string) (structures.Package, error) {
 	pkg := structures.Package{}
 
-	err := db.Joins("INNER JOIN download_queue as dq ON dq.package_id = packages.id").
-		Select("packages.id, packages.name, packages.version, packages.ord, packages.path_to_file, packages.on_server").
+	err := db.Joins("INNER JOIN files ON packages.file = files.id").
+		Joins("INNER JOIN download_queue as dq ON dq.file_id = files.id").
+		Select("packages.id, packages.name, packages.version, packages.ord, files.path, packages.on_server").
 		Where("dq.session_key = ?", key).
 		Last(&pkg).Error
 

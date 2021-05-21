@@ -4,7 +4,6 @@ import (
 	"RDMS_TCP/structures"
 	"RDMS_TCP/utils"
 	"bufio"
-	"fmt"
 	"io"
 	"log"
 	"net"
@@ -14,6 +13,11 @@ const BUFFERSIZE = 4096
 
 func SendPackage(conn net.Conn, pkg structures.Package) error {
 	file, err := utils.OpenFile(pkg.PathToFile)
+	defer file.Close()
+
+	if err != nil {
+		return err
+	}
 
 	reader := bufio.NewReader(file)
 
@@ -23,13 +27,10 @@ func SendPackage(conn net.Conn, pkg structures.Package) error {
 	}
 
 	sendBuffer := make([]byte, BUFFERSIZE)
-	n := 0
 	for {
 		_, err = reader.Read(sendBuffer)
-		n++
 
 		if err == io.EOF {
-			fmt.Print(n)
 			break
 		}
 

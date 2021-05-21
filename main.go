@@ -19,7 +19,7 @@ func main() {
 	for {
 		conn, err := socket.Accept()
 
-		handler.Accept(conn, err)
+		go handler.Accept(conn, err)
 
 	}
 }

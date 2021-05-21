@@ -5,7 +5,7 @@ type Package struct {
 	Name string
 	Version string
 	Ord uint8
-	PathToFile string `gorm:"column:path_to_file"`
+	PathToFile string `gorm:"column:path"`
 	OnServer string `gorm:"column:on_server"`
 }
 
