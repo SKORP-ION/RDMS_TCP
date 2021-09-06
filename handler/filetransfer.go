@@ -4,6 +4,7 @@ import (
 	"RDMS_TCP/structures"
 	"RDMS_TCP/utils"
 	"bufio"
+	"fmt"
 	"io"
 	"log"
 	"net"
@@ -28,22 +29,18 @@ func SendPackage(conn net.Conn, pkg structures.Package) error {
 
 	sendBuffer := make([]byte, BUFFERSIZE)
 	for {
-		_, err = reader.Read(sendBuffer)
+		n, err := reader.Read(sendBuffer)
 
 		if err == io.EOF {
+			fmt.Println("EOF")
 			break
 		}
 
-		_, err = conn.Write(sendBuffer)
+		_, err = conn.Write(sendBuffer[:n])
 		if err != nil {
 			return err
 		}
 	}
-	_, err = conn.Write([]byte("EOF"))
-
-	if err != nil {
-		return err
-	}
-
+	fmt.Println("done")
 	return nil
 }
